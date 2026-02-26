@@ -1,20 +1,53 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter, useFocusEffect } from 'expo-router';
 import Header from '../components/Header';
 import WorkoutCard from '../components/WorkoutCard';
 import GlobalStatCard from '../components/GlobalStatCard';
 import AddWorkoutCard from '../components/AddWorkoutCard';
 import NavigationMenu from '../components/NavigationMenu';
+import { getAllWorkouts } from '../storage/workoutStorage';
 
 const HomeScreen = () => {
     const router = useRouter();
-    const recentWorkouts = [
-        { id: '1', type: 'running', title: 'Morning Run', date: 'Today, 7:00 AM', duration: 45, calories: 320, intensity: 'HIGH' },
-        { id: '2', type: 'swimming', title: 'Swimming', date: 'Yesterday', duration: 30, calories: 210, intensity: 'MED' },
-        { id: '3', type: 'weightlifting', title: 'Weightlifting', date: 'Mon, 12 Oct', duration: 60, calories: 450, intensity: 'HIGH' },
-        { id: '4', type: 'yoga', title: 'Yoga Flow', date: 'Sun, 11 Oct', duration: 20, calories: 80, intensity: 'LOW' },
-    ];
+    const [workouts, setWorkouts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useFocusEffect(
+        useCallback(() => {
+            const fetchWorkouts = async () => {
+                try {
+                    setIsLoading(true);
+                    const data = await getAllWorkouts();
+                    setWorkouts(data);
+                } catch (error) {
+                    console.error('Error fetching workouts', error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchWorkouts();
+        }, [])
+    );
+
+    const renderWorkout = ({ item }) => {
+        const estCalories = Math.round(item.duration * 7.5);
+
+        const d = new Date(item.date);
+        const dateString = d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        return (
+            <WorkoutCard
+                type={item.type.toLowerCase()}
+                title={`${item.type} Session`}
+                date={dateString}
+                duration={item.duration}
+                calories={estCalories}
+                intensity={item.intensity.toUpperCase()}
+            />
+        );
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -23,41 +56,45 @@ const HomeScreen = () => {
 
                 <View style={styles.fixedCardContainer}>
                     <GlobalStatCard
-                        workouts={42}
-                        minutes="1,250"
+                        workouts={0}
+                        minutes="0"
                         status="Today"
                         onViewReport={() => console.log('View Report')}
                     />
                 </View>
 
-                <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-                    {/* Recent Activities Section */}
+                <View style={styles.fixedHeaderInner}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Recent Activities</Text>
                         <TouchableOpacity>
                             <Text style={styles.seeAll}>See all</Text>
                         </TouchableOpacity>
                     </View>
+                </View>
 
-                    <View style={styles.workoutList}>
-                        {recentWorkouts.map(item => (
-                            <WorkoutCard
-                                key={item.id}
-                                type={item.type}
-                                title={item.title}
-                                date={item.date}
-                                duration={item.duration}
-                                calories={item.calories}
-                                intensity={item.intensity}
-                            />
-                        ))}
-                    </View>
+                <FlatList
+                    data={workouts}
+                    keyExtractor={(item) => item.id.toString()}
+                    style={styles.scrollView}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={styles.listContent}
+                    renderItem={renderWorkout}
+                    ListEmptyComponent={
+                        isLoading ? (
+                            <ActivityIndicator size="large" color="#00D09C" style={styles.loader} />
+                        ) : (
+                            <View style={styles.emptyContainer}>
+                                <Text style={styles.emptyText}>No workouts logged yet.</Text>
+                                <Text style={styles.emptySubtext}>Tap below to start your fitness journey!</Text>
+                            </View>
+                        )
+                    }
+                />
 
-                    {/* Promo Banner */}
+                {/* Fixed Bottom CTA */}
+                <View style={styles.fixedBottomContainer}>
                     <AddWorkoutCard onAddPress={() => router.push('/add-workout')} />
-
-                    <View style={{ height: 100 }} />
-                </ScrollView>
+                </View>
 
                 <View style={styles.navContainer}>
                     <NavigationMenu activeTab="Home" />
@@ -81,6 +118,15 @@ const styles = StyleSheet.create({
         zIndex: 1,
         marginTop: -20,
     },
+    fixedHeaderInner: {
+        paddingHorizontal: 20,
+        backgroundColor: '#F8F9FB',
+        paddingTop: 15,
+    },
+    promoContainer: {
+        marginTop: 15,
+        marginBottom: 10,
+    },
     scrollView: {
         flex: 1,
         paddingHorizontal: 20,
@@ -89,8 +135,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 15,
-        marginTop: 5,
+        marginBottom: 10,
     },
     sectionTitle: {
         fontSize: 18,
@@ -104,11 +149,40 @@ const styles = StyleSheet.create({
     workoutList: {
         marginBottom: 20,
     },
+    fixedBottomContainer: {
+        paddingHorizontal: 20,
+        backgroundColor: '#F8F9FB',
+        paddingTop: 10,
+        paddingBottom: 70, // Space above navigation menu
+    },
     navContainer: {
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
+    },
+    listContent: {
+        paddingBottom: 100,
+    },
+    loader: {
+        marginTop: 40,
+    },
+    emptyContainer: {
+        paddingVertical: 40,
+        alignItems: 'center',
+    },
+    emptyText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#3B3C73',
+        marginBottom: 8,
+    },
+    emptySubtext: {
+        fontSize: 14,
+        color: '#8089B2',
+    },
+    footerContainer: {
+        marginTop: 10,
     },
 });
 

@@ -44,14 +44,14 @@ const styles = StyleSheet.create({
         borderTopColor: '#F0F0F0',
         justifyContent: 'space-around',
         alignItems: 'center',
-        paddingBottom: 20, // For safe area/modern look
+        paddingBottom: 15, // For safe area/modern look
     },
     tabItem: {
         alignItems: 'center',
         justifyContent: 'center',
     },
     tabLabel: {
-        fontSize: 11,
+        fontSize: 10,
         marginTop: 4,
         color: '#A0A0A0',
     },

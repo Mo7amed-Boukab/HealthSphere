@@ -8,6 +8,8 @@ import SecondaryButton from '../components/SecondaryButton';
 import CategorieOptionButton from '../components/CategorieOptionButton';
 import InputField from '../components/InputField';
 import DateTimePickerField from '../components/DateTimePickerField';
+import { saveWorkout } from '../storage/workoutStorage';
+import { Alert } from 'react-native';
 
 const AddWorkoutScreen = () => {
     const router = useRouter();
@@ -16,6 +18,40 @@ const AddWorkoutScreen = () => {
     const [intensity, setIntensity] = useState('Medium');
     const [dateTime, setDateTime] = useState(new Date());
     const [notes, setNotes] = useState('');
+
+    const handleSave = async () => {
+        if (!duration) {
+            Alert.alert('Error', 'Please enter the duration of your workout.');
+            return;
+        }
+
+        const workout = {
+            type: selectedCategory,
+            duration: parseInt(duration),
+            intensity: intensity,
+            date: dateTime.toISOString(),
+            notes: notes,
+        };
+
+        try {
+            await saveWorkout(workout);
+            Alert.alert('Success', 'Workout saved successfully!', [
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        // Clear form
+                        setDuration('');
+                        setNotes('');
+                        // Navigate back
+                        router.back();
+                    }
+                }
+            ]);
+        } catch (error) {
+            Alert.alert('Error', 'Failed to save workout. Please try again.');
+            console.error(error);
+        }
+    };
 
     const categories = [
         { id: '1', title: 'Run', icon: 'walking' },
@@ -117,7 +153,7 @@ const AddWorkoutScreen = () => {
                 <PrimaryButton
                     title="Save Workout"
                     iconName="checkmark-circle-outline"
-                    onPress={() => console.log('Saving...')}
+                    onPress={handleSave}
                 />
                 <SecondaryButton
                     title="Cancel"
