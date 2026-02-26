@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity, ImageBackground } from 'react-native';
+import { useRouter } from 'expo-router';
 import Header from '../components/Header';
 import WorkoutCard from '../components/WorkoutCard';
 import GlobalStatCard from '../components/GlobalStatCard';
@@ -7,6 +8,7 @@ import AddWorkoutCard from '../components/AddWorkoutCard';
 import NavigationMenu from '../components/NavigationMenu';
 
 const HomeScreen = () => {
+    const router = useRouter();
     const recentWorkouts = [
         { id: '1', type: 'running', title: 'Morning Run', date: 'Today, 7:00 AM', duration: 45, calories: 320, intensity: 'HIGH' },
         { id: '2', type: 'swimming', title: 'Swimming', date: 'Yesterday', duration: 30, calories: 210, intensity: 'MED' },
@@ -52,7 +54,7 @@ const HomeScreen = () => {
                     </View>
 
                     {/* Promo Banner */}
-                    <AddWorkoutCard onAddPress={() => console.log('Add Workout')} />
+                    <AddWorkoutCard onAddPress={() => router.push('/add-workout')} />
 
                     <View style={{ height: 100 }} />
                 </ScrollView>
@@ -68,7 +70,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#32336A', 
+        backgroundColor: '#32336A',
     },
     container: {
         flex: 1,
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     fixedCardContainer: {
         paddingHorizontal: 20,
         zIndex: 1,
-        marginTop: -20, 
+        marginTop: -20,
     },
     scrollView: {
         flex: 1,
@@ -88,7 +90,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 15,
-        marginTop: 5, 
+        marginTop: 5,
     },
     sectionTitle: {
         fontSize: 18,
