@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
     },
     activeButton: {
-        backgroundColor: '#0d9c80c0',
-        borderColor: '#0d9c80c0',
+        backgroundColor: '#03bd8eff',
+        borderColor: '#03bd8eff',
     },
     inactiveButton: {
         backgroundColor: '#FFFFFF',

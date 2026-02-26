@@ -15,13 +15,13 @@ const PrimaryButton = ({ title, onPress, iconName }) => {
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#0d9c80c0',
+        backgroundColor: '#03bd8eff',
         borderRadius: 25,
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        shadowColor: '#0d9c80c0',
+        shadowColor: '#03bd8eff',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.3,
         shadowRadius: 8,

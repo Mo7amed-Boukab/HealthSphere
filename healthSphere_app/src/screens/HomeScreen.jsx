@@ -82,7 +82,7 @@ const HomeScreen = () => {
                 <View style={styles.fixedHeaderInner}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Recent Activities</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => router.push('/workouts')}>
                             <Text style={styles.seeAll}>See all</Text>
                         </TouchableOpacity>
                     </View>

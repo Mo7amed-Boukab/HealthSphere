@@ -7,7 +7,12 @@ const Header = ({ name = "mohamed" }) => {
         <View style={styles.container}>
             <View style={styles.topRow}>
                 <View style={styles.logoContainer}>
-                    <Ionicons name="heart-half-outline" size={28} color="#00D09C" />
+                    <View style={styles.logoIconWrapper}>
+                        <FontAwesome5 name="heartbeat" size={24} color="#03BD8E" />
+                        <View style={styles.miniIconContainer}>
+                            <FontAwesome5 name="running" size={12} color="#03BD8E" />
+                        </View>
+                    </View>
                     <Text style={styles.logoText}>HealthSphere</Text>
                 </View>
                 <TouchableOpacity style={styles.notificationBtn}>
@@ -40,6 +45,22 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         gap: 8,
+    },
+    logoIconWrapper: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        width: 32,
+        height: 32,
+    },
+    miniIconContainer: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        backgroundColor: '#32336A', // matches header bg for a 'cutout' effect
+        padding: 1,
+        borderRadius: 10,
     },
     logoText: {
         color: '#FFFFFF',
