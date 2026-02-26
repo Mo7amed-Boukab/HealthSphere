@@ -51,3 +51,21 @@ export const clearWorkouts = async () => {
         return false;
     }
 };
+
+/**
+ * Delete a specific workout from AsyncStorage
+ * @param {string} id - The unique ID of the workout to delete
+ */
+export const deleteWorkout = async (id) => {
+    try {
+        const existingWorkoutsJson = await AsyncStorage.getItem(WORKOUTS_KEY);
+        const existingWorkouts = existingWorkoutsJson ? JSON.parse(existingWorkoutsJson) : [];
+
+        const updatedWorkouts = existingWorkouts.filter(w => w.id !== id);
+        await AsyncStorage.setItem(WORKOUTS_KEY, JSON.stringify(updatedWorkouts));
+        return true;
+    } catch (error) {
+        console.error('Error deleting workout:', error);
+        throw error;
+    }
+};

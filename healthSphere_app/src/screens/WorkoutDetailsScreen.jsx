@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { deleteWorkout } from '../storage/workoutStorage';
 
 const WorkoutDetailsScreen = () => {
     const router = useRouter();
@@ -16,9 +16,33 @@ const WorkoutDetailsScreen = () => {
         notes: params.notes || ""
     };
 
+    const handleDelete = () => {
+        Alert.alert(
+            "Delete Workout",
+            "Are you sure you want to delete this workout session?",
+            [
+                { text: "Cancel", style: "cancel" },
+                {
+                    text: "Delete",
+                    style: "destructive",
+                    onPress: async () => {
+                        try {
+                            const success = await deleteWorkout(workout.id);
+                            if (success) {
+                                router.replace('/');
+                            }
+                        } catch (error) {
+                            Alert.alert("Error", "Failed to delete workout.");
+                        }
+                    }
+                }
+            ]
+        );
+    };
+
     // Helper to get category icon
     const getIcon = () => {
-        switch (workout.type.toLowerCase()) {
+        switch (workout.type?.toLowerCase()) {
             case 'run': return 'running';
             case 'cycle': return 'bicycle';
             case 'gym': return 'dumbbell';
@@ -117,7 +141,7 @@ const WorkoutDetailsScreen = () => {
 
             {/* Fixed Bottom Action */}
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.deleteBtn}>
+                <TouchableOpacity style={styles.deleteBtn} onPress={handleDelete}>
                     <Ionicons name="trash-outline" size={20} color="#00D09C" />
                     <Text style={styles.deleteBtnText}>Delete Workout</Text>
                 </TouchableOpacity>
