@@ -45,6 +45,19 @@ const HomeScreen = () => {
                 duration={item.duration}
                 calories={estCalories}
                 intensity={item.intensity.toUpperCase()}
+                onPress={() => router.push({
+                    pathname: '/workout-details',
+                    params: {
+                        id: item.id,
+                        type: item.type,
+                        title: `${item.type} Session`,
+                        date: dateString,
+                        duration: item.duration,
+                        calories: estCalories,
+                        intensity: item.intensity,
+                        notes: item.notes || ""
+                    }
+                })}
             />
         );
     };

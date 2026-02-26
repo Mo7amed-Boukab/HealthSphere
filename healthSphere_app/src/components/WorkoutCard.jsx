@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const WorkoutCard = ({ type, title, date, duration, calories, intensity }) => {
+const WorkoutCard = ({ type, title, date, duration, calories, intensity, onPress }) => {
     const getIcon = () => {
         switch (type.toLowerCase()) {
             case 'running':
@@ -33,7 +33,7 @@ const WorkoutCard = ({ type, title, date, duration, calories, intensity }) => {
     };
 
     return (
-        <TouchableOpacity style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={onPress}>
             <View style={styles.iconContainer}>
                 {getIcon()}
             </View>
