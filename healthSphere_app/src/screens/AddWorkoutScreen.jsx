@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, ScrollView, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import CategorieOptionButton from '../components/CategorieOptionButton';
 import InputField from '../components/InputField';
+import DateTimePickerField from '../components/DateTimePickerField';
 
 const AddWorkoutScreen = () => {
     const router = useRouter();
     const [selectedCategory, setSelectedCategory] = useState('Run');
     const [duration, setDuration] = useState('');
     const [intensity, setIntensity] = useState('Medium');
-    const [dateTime, setDateTime] = useState('');
+    const [dateTime, setDateTime] = useState(new Date());
     const [notes, setNotes] = useState('');
 
     const categories = [
@@ -91,11 +93,11 @@ const AddWorkoutScreen = () => {
                 </View>
 
                 {/* Date & Time */}
-                <InputField
+                <DateTimePickerField
                     label="Date & Time"
                     value={dateTime}
-                    onChangeText={setDateTime}
-                    placeholder="mm/dd/yyyy, --:--"
+                    onConfirm={setDateTime}
+                    placeholder="Select Date & Time"
                 />
 
                 {/* Notes */}
