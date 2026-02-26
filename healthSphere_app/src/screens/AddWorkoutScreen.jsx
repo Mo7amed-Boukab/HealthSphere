@@ -275,8 +275,8 @@ const styles = StyleSheet.create({
         color: '#1A1A1A',
     },
     footer: {
+        paddingTop: 20,
         paddingHorizontal: 20,
-        paddingBottom: 20,
         backgroundColor: '#F8F9FB',
     },
 });

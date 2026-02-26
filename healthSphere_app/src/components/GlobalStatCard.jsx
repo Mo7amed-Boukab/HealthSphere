@@ -5,7 +5,7 @@ const GlobalStatCard = ({ workouts = 42, minutes = "1,250", status = "Today", on
     return (
         <View style={styles.summaryCard}>
             <View style={styles.summaryHeader}>
-                <Text style={styles.summaryTitle}>Weekly Summary</Text>
+                <Text style={styles.summaryTitle}>Activity Summary</Text>
                 <TouchableOpacity onPress={onViewReport}>
                     <Text style={styles.viewReport}>View Report</Text>
                 </TouchableOpacity>

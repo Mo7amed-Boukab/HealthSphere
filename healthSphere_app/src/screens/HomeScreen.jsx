@@ -62,6 +62,9 @@ const HomeScreen = () => {
         );
     };
 
+    const totalWorkouts = workouts.length;
+    const totalMinutes = workouts.reduce((acc, curr) => acc + (parseInt(curr.duration) || 0), 0);
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
@@ -69,9 +72,9 @@ const HomeScreen = () => {
 
                 <View style={styles.fixedCardContainer}>
                     <GlobalStatCard
-                        workouts={0}
-                        minutes="0"
-                        status="Today"
+                        workouts={totalWorkouts}
+                        minutes={totalMinutes.toString()}
+                        status="All Time"
                         onViewReport={() => console.log('View Report')}
                     />
                 </View>
