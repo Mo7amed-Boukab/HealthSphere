@@ -1,39 +1,19 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Header';
 import WorkoutCard from '../components/WorkoutCard';
 import GlobalStatCard from '../components/GlobalStatCard';
 import AddWorkoutCard from '../components/AddWorkoutCard';
 import NavigationMenu from '../components/NavigationMenu';
-import { getAllWorkouts } from '../storage/workoutStorage';
+import { useWorkouts } from '../context/WorkoutContext';
 
 const HomeScreen = () => {
     const navigation = useNavigation();
-    const [workouts, setWorkouts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useFocusEffect(
-        useCallback(() => {
-            const fetchWorkouts = async () => {
-                try {
-                    setIsLoading(true);
-                    const data = await getAllWorkouts();
-                    setWorkouts(data);
-                } catch (error) {
-                    console.error('Error fetching workouts', error);
-                } finally {
-                    setIsLoading(false);
-                }
-            };
-            fetchWorkouts();
-        }, [])
-    );
+    const { workouts, isLoading, totalWorkouts, totalMinutes, refreshWorkouts } = useWorkouts();
 
     const renderWorkout = ({ item }) => {
-        const estCalories = Math.round(item.duration * 7.5);
-
         const d = new Date(item.date);
         const dateString = d.toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
@@ -43,7 +23,6 @@ const HomeScreen = () => {
                 title={`${item.type} Session`}
                 date={dateString}
                 duration={item.duration}
-                calories={estCalories}
                 intensity={item.intensity.toUpperCase()}
                 onPress={() => navigation.navigate('WorkoutDetails', {
                     id: item.id,
@@ -51,16 +30,12 @@ const HomeScreen = () => {
                     title: `${item.type} Session`,
                     date: dateString,
                     duration: item.duration,
-                    calories: estCalories,
                     intensity: item.intensity,
                     notes: item.notes || ""
                 })}
             />
         );
     };
-
-    const totalWorkouts = workouts.length;
-    const totalMinutes = workouts.reduce((acc, curr) => acc + (parseInt(curr.duration) || 0), 0);
 
     return (
         <SafeAreaView style={styles.safeArea}>

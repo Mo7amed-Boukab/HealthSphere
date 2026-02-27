@@ -2,13 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { deleteWorkout } from '../storage/workoutStorage';
+import { useWorkouts } from '../context/WorkoutContext';
 
 const WorkoutDetailsScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const params = route.params || {};
-
+    const { deleteWorkout } = useWorkouts();
+    
     const workout = {
         id: params.id,
         type: params.type || '',
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderWidth: 2,
         borderColor: '#FFFFFF',
-        shadowColor: '#00D09C',
+        shadowColor: '#A0A0A0',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.1,
         shadowRadius: 15,

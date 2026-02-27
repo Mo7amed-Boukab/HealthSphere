@@ -8,10 +8,11 @@ import SecondaryButton from '../components/SecondaryButton';
 import CategorieOptionButton from '../components/CategorieOptionButton';
 import InputField from '../components/InputField';
 import DateTimePickerField from '../components/DateTimePickerField';
-import { saveWorkout } from '../storage/workoutStorage';
+import { useWorkouts } from '../context/WorkoutContext';
 
 const AddWorkoutScreen = () => {
     const navigation = useNavigation();
+    const { addWorkout } = useWorkouts();
     const [selectedCategory, setSelectedCategory] = useState('Run');
     const [duration, setDuration] = useState('');
     const [intensity, setIntensity] = useState('Medium');
@@ -33,7 +34,7 @@ const AddWorkoutScreen = () => {
         };
 
         try {
-            await saveWorkout(workout);
+            await addWorkout(workout);
             Alert.alert('Success', 'Workout saved successfully!', [
                 {
                     text: 'OK',
@@ -107,20 +108,20 @@ const AddWorkoutScreen = () => {
                 <View style={styles.sectionContainer}>
                     <Text style={styles.fieldLabel}>Intensity</Text>
                     <View style={styles.intensityContainer}>
-                        {intensities.map((item) => (
+                        {intensities.map((level) => (
                             <TouchableOpacity
-                                key={item}
+                                key={level}
                                 style={[
                                     styles.intensityButton,
-                                    intensity === item && styles.activeIntensityButton
+                                    intensity === level && styles.activeIntensityButton
                                 ]}
-                                onPress={() => setIntensity(item)}
+                                onPress={() => setIntensity(level)}
                             >
                                 <Text style={[
                                     styles.intensityText,
-                                    intensity === item && styles.activeIntensityText
+                                    intensity === level && styles.activeIntensityText
                                 ]}>
-                                    {item}
+                                    {level}
                                 </Text>
                             </TouchableOpacity>
                         ))}
