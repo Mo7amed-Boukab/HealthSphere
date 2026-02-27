@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Header from '../components/Header';
 import WorkoutCard from '../components/WorkoutCard';
 import GlobalStatCard from '../components/GlobalStatCard';
@@ -10,7 +10,7 @@ import NavigationMenu from '../components/NavigationMenu';
 import { getAllWorkouts } from '../storage/workoutStorage';
 
 const HomeScreen = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
     const [workouts, setWorkouts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -45,18 +45,15 @@ const HomeScreen = () => {
                 duration={item.duration}
                 calories={estCalories}
                 intensity={item.intensity.toUpperCase()}
-                onPress={() => router.push({
-                    pathname: '/workout-details',
-                    params: {
-                        id: item.id,
-                        type: item.type,
-                        title: `${item.type} Session`,
-                        date: dateString,
-                        duration: item.duration,
-                        calories: estCalories,
-                        intensity: item.intensity,
-                        notes: item.notes || ""
-                    }
+                onPress={() => navigation.navigate('WorkoutDetails', {
+                    id: item.id,
+                    type: item.type,
+                    title: `${item.type} Session`,
+                    date: dateString,
+                    duration: item.duration,
+                    calories: estCalories,
+                    intensity: item.intensity,
+                    notes: item.notes || ""
                 })}
             />
         );
@@ -82,7 +79,7 @@ const HomeScreen = () => {
                 <View style={styles.fixedHeaderInner}>
                     <View style={styles.sectionHeader}>
                         <Text style={styles.sectionTitle}>Recent Activities</Text>
-                        <TouchableOpacity onPress={() => router.push('/workouts')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Workouts')}>
                             <Text style={styles.seeAll}>See all</Text>
                         </TouchableOpacity>
                     </View>
@@ -109,7 +106,7 @@ const HomeScreen = () => {
 
                 {/* Fixed Bottom CTA */}
                 <View style={styles.fixedBottomContainer}>
-                    <AddWorkoutCard onAddPress={() => router.push('/add-workout')} />
+                    <AddWorkoutCard onAddPress={() => navigation.navigate('AddWorkout')} />
                 </View>
 
                 <View style={styles.navContainer}>
@@ -168,7 +165,7 @@ const styles = StyleSheet.create({
     fixedBottomContainer: {
         paddingHorizontal: 20,
         backgroundColor: '#F8F9FB',
-        paddingTop: 10,
+        paddingTop: 18,
         paddingBottom: 70, // Space above navigation menu
     },
     navContainer: {

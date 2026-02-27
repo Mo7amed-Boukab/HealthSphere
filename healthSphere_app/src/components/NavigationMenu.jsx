@@ -1,16 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { useRouter } from 'expo-router';
+const NavigationMenu = ({ activeTab: propActiveTab }) => {
+    const navigation = useNavigation();
+    const route = useRoute();
 
-const NavigationMenu = ({ activeTab = 'Home' }) => {
-    const router = useRouter();
+    // Determine active tab based on current route if not provided explicitly
+    const activeTab = propActiveTab || route.name;
 
     const tabs = [
-        { name: 'Home', icon: 'home', type: 'Ionicons', route: '/' },
-        { name: 'Workouts', icon: 'dumbbell', type: 'FontAwesome5', route: '/workouts' },
-        { name: 'Add', icon: 'add', type: 'Ionicons', route: '/add-workout', isSpecial: true },
+        { name: 'Home', icon: 'home', type: 'Ionicons', route: 'Home' },
+        { name: 'Workouts', icon: 'dumbbell', type: 'FontAwesome5', route: 'Workouts' },
+        { name: 'Add', icon: 'add', type: 'Ionicons', route: 'AddWorkout', isSpecial: true },
         { name: 'Progress', icon: 'bar-chart', type: 'Ionicons', route: '' },
         { name: 'Profile', icon: 'person-outline', type: 'Ionicons', route: '' },
     ];
@@ -36,7 +39,7 @@ const NavigationMenu = ({ activeTab = 'Home' }) => {
 
     const handlePress = (tab) => {
         if (tab.route) {
-            router.push(tab.route);
+            navigation.navigate(tab.route);
         }
     };
 
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#F0F0F0',
         justifyContent: 'space-around',
         alignItems: 'center',
-        paddingBottom: 15, // For safe area/modern look
+        paddingBottom: 12, // For safe area/modern look
     },
     tabItem: {
         alignItems: 'center',

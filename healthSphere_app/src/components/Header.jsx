@@ -30,7 +30,7 @@ const Header = ({ name = "mohamed" }) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#32336A',
-        paddingTop: 55,
+        paddingTop: 35,
         paddingHorizontal: 20,
         paddingBottom: 35,
         borderBottomLeftRadius: 12,

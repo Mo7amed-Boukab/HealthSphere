@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { Ionicons, FontAwesome5 } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import CategorieOptionButton from '../components/CategorieOptionButton';
 import InputField from '../components/InputField';
 import DateTimePickerField from '../components/DateTimePickerField';
 import { saveWorkout } from '../storage/workoutStorage';
-import { Alert } from 'react-native';
 
 const AddWorkoutScreen = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
     const [selectedCategory, setSelectedCategory] = useState('Run');
     const [duration, setDuration] = useState('');
     const [intensity, setIntensity] = useState('Medium');
@@ -43,7 +42,7 @@ const AddWorkoutScreen = () => {
                         setDuration('');
                         setNotes('');
                         // Navigate back
-                        router.back();
+                        navigation.goBack();
                     }
                 }
             ]);
@@ -65,7 +64,7 @@ const AddWorkoutScreen = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                     <Ionicons name="arrow-back" size={24} color="#3B3C73" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Log New Workout</Text>
@@ -157,7 +156,7 @@ const AddWorkoutScreen = () => {
                 />
                 <SecondaryButton
                     title="Cancel"
-                    onPress={() => router.back()}
+                    onPress={() => navigation.goBack()}
                 />
             </View>
         </SafeAreaView>

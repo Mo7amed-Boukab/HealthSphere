@@ -1,11 +1,13 @@
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { deleteWorkout } from '../storage/workoutStorage';
 
 const WorkoutDetailsScreen = () => {
-    const router = useRouter();
-    const params = useLocalSearchParams();
+    const navigation = useNavigation();
+    const route = useRoute();
+    const params = route.params || {};
 
     const workout = {
         id: params.id,
@@ -29,7 +31,7 @@ const WorkoutDetailsScreen = () => {
                         try {
                             const success = await deleteWorkout(workout.id);
                             if (success) {
-                                router.replace('/');
+                                navigation.navigate('Home');
                             }
                         } catch (error) {
                             Alert.alert("Error", "Failed to delete workout.");
@@ -54,7 +56,7 @@ const WorkoutDetailsScreen = () => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => router.back()} style={styles.headerBtn}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
                     <Ionicons name="arrow-back" size={24} color="#1A1A1A" />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>Session Details</Text>

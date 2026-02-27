@@ -1,14 +1,13 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import WorkoutCard from '../components/WorkoutCard';
 import NavigationMenu from '../components/NavigationMenu';
 import { getAllWorkouts } from '../storage/workoutStorage';
-import { Ionicons } from '@expo/vector-icons';
 
 const WorkoutsScreen = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
     const [workouts, setWorkouts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -43,18 +42,15 @@ const WorkoutsScreen = () => {
                 duration={item.duration}
                 calories={estCalories}
                 intensity={item.intensity.toUpperCase()}
-                onPress={() => router.push({
-                    pathname: '/workout-details',
-                    params: {
-                        id: item.id,
-                        type: item.type,
-                        title: `${item.type} Session`,
-                        date: dateString,
-                        duration: item.duration,
-                        calories: estCalories,
-                        intensity: item.intensity,
-                        notes: item.notes || ""
-                    }
+                onPress={() => navigation.navigate('WorkoutDetails', {
+                    id: item.id,
+                    type: item.type,
+                    title: `${item.type} Session`,
+                    date: dateString,
+                    duration: item.duration,
+                    calories: estCalories,
+                    intensity: item.intensity,
+                    notes: item.notes || ""
                 })}
             />
         );
