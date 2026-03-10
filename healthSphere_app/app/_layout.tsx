@@ -1,6 +1,6 @@
-import React from 'react';
-import AppNavigator from '../src/navigation/AppNavigator';
+import React from "react";
+import { Slot } from "expo-router";
 
 export default function RootLayout() {
-  return <AppNavigator />;
+  return <Slot />;
 }
